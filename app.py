@@ -10,7 +10,7 @@ nltk.download('stopwords')
 
 
 
-def find_keywords(corpus,top_N):
+def find_keywords(corpus):
   vectorizer = TfidfVectorizer()
   vectors = vectorizer.fit_transform(corpus)
   names = vectorizer.get_feature_names()
@@ -23,7 +23,11 @@ def find_keywords(corpus,top_N):
   #remove all columns containing a stop word from the resultant dataframe. 
   df = df[filter(lambda x: x not in list(st) , df.columns)]
   keywords_ = []
-  N = 10;
+  l = len(list(df.columns))
+  if l>10:    
+      N = 10
+  else:
+      N = l
   #print(df)
   #print(len(N))
   for i in df.iterrows():
@@ -35,14 +39,14 @@ def find_keywords(corpus,top_N):
   #print(keywords_)
   return keywords_
 
-def input_text(text,top_N):
+def input_text(text):
   #text = input('Enter Your Text :')
   #top_N = int(input('Enter how many keywords you want to extract :'))
   text = text.replace('.',' ')
   text = re.sub(r'\s+',' ',re.sub(r'[^\w \s]','',text) ).lower()
   corpus = re.split('chapter \d+',text)
-  keywords = find_keywords(corpus,top_N)
-  #print(keywords)
+  keywords = find_keywords(corpus)
+  print(keywords)
   return keywords
 
 
@@ -57,8 +61,8 @@ def predict():
     data = request.get_json(force=True)
     print(data)
     text = data['text']
-    N = int(data['top_N'])
-    keywords = input_text(text,N)
+    #N = int(data['top_N'])
+    keywords = input_text(text)
     response = {
         'results':keywords
         }
