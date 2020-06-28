@@ -61,12 +61,17 @@ def predict():
     data = request.get_json(force=True)
     print(data)
     text = data['text']
-    #N = int(data['top_N'])
-    keywords = input_text(text)
+    API_KEY = data['key']
+    if API_KEY == 'AQUAMANNOTELY@69':
+        
+        #N = int(data['top_N'])
+        keywords = input_text(text)
+    else:
+        keywords = []
+        
     response = {
-        'results':keywords
+            'results':keywords
         }
-    
     
     return jsonify(results=response)
 
